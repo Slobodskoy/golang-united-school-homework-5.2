@@ -1,15 +1,15 @@
-package cache
+package main
 
 import "time"
 
 type CacheItem struct {
-	value string
+	value    string
 	deadline *time.Time
 }
 
 func CreateCacheItem(value string, deadline *time.Time) CacheItem {
-	return CacheItem {
-		value: value,
+	return CacheItem{
+		value:    value,
 		deadline: deadline,
 	}
 }
@@ -27,7 +27,7 @@ func NewCache() Cache {
 func (c *Cache) Get(key string) (string, bool) {
 	currentTime := time.Now()
 	val, ok := c.storage[key]
-	if ok && val.deadline != nil && currentTime.After(*val.deadline) {
+	if ok && (val.deadline == nil || currentTime.After(*val.deadline)) {
 		return val.value, true
 	}
 	return "", false
@@ -40,7 +40,7 @@ func (c *Cache) Put(key, value string) {
 
 func (c *Cache) Keys() []string {
 	currentTime := time.Now()
-	result := make([]string,0)
+	result := make([]string, 0)
 	for k, v := range c.storage {
 		if v.deadline != nil && !currentTime.After(*v.deadline) {
 			result = append(result, k)
