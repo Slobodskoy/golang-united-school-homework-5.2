@@ -27,7 +27,7 @@ func NewCache() Cache {
 func (c *Cache) Get(key string) (string, bool) {
 	currentTime := time.Now()
 	val, ok := c.storage[key]
-	if ok && val.deadline != nil && !currentTime.After(*val.deadline) {
+	if ok && val.deadline != nil && currentTime.After(*val.deadline) {
 		return val.value, true
 	}
 	return "", false
