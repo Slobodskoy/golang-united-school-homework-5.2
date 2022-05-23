@@ -41,9 +41,9 @@ func (c *Cache) Put(key, value string) {
 func (c *Cache) Keys() []string {
 	currentTime := time.Now()
 	result := make([]string,0)
-	for _, v := range c.storage {
+	for k, v := range c.storage {
 		if v.deadline != nil && !currentTime.After(*v.deadline) {
-			result = append(result, v.value)
+			result = append(result, k)
 		}
 	}
 	return result
