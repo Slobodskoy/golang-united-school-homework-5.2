@@ -42,7 +42,7 @@ func (c *Cache) Keys() []string {
 	currentTime := time.Now()
 	result := make([]string, 0)
 	for k, v := range c.storage {
-		if v.deadline != nil && !currentTime.After(*v.deadline) {
+		if v.deadline == nil || currentTime.After(*v.deadline) {
 			result = append(result, k)
 		}
 	}
